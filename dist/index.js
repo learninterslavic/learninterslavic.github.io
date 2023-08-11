@@ -5,6 +5,10 @@ const [descriptionEl] = document.getElementsByClassName('description')
 const [wordListEl] = document.getElementsByClassName('wordList')
 const [intervalEl] = document.getElementsByClassName('selectedInterval')
 const [currentIntervalEl] = document.getElementsByClassName('currentInterval')
+const [cyrEl] = document.getElementsByClassName('cyr')
+const [latEl] = document.getElementsByClassName('lat')
+
+let alphabet = 'c'
 
 let interval = 800
 let paused = false
@@ -15,6 +19,8 @@ intervalEl.innerHTML = interval
 let wordTimer
 let descriptionTimer
 
+const timers = new Set()
+
 class Timer {
 	constructor(callback, delay) {
 		this.remaining = delay
@@ -22,6 +28,16 @@ class Timer {
 		this.timerId = undefined
 		this.start = undefined
 		this.resume()
+		timers.add(this)
+	}
+	static destroyAll() {
+		timers.forEach(timer => timer.destroy())
+	}
+
+	destroy() {
+		this.callback = () => {}
+		//this.resume = () => {}
+		// console.log(this)
 	}
 
 	pause() {
@@ -63,15 +79,22 @@ document.addEventListener('wheel', e => {
 	intervalEl.innerHTML = interval
 })
 
-async function init(ver = 'c') {
-	const response = await fetch(`words_${ver}.json`)
-	const words = await response.json()
+async function loadAlphabet() {
+	const response = await fetch(`words_${alphabet}.json`)
+	return await response.json()
+}
+
+async function init() {
+	let words = await loadAlphabet(alphabet)
+	let currentAlphabet = alphabet
 	const wordCount = words.length
 
 	const randomWord = () => words[Math.floor(Math.random() * wordCount)]
 	let color = Math.random() * 360
 
-	const tick = () => {
+	const tick = async () => {
+		if (alphabet !== currentAlphabet) words = await loadAlphabet(alphabet)
+		currentAlphabet = alphabet
 		const [[_, word], ___, [__, form], ...description] = randomWord()
 
 		const nextColor = (color + 75) % 360
@@ -131,5 +154,21 @@ async function init(ver = 'c') {
 
 	setTimeout(() => tick(), interval)
 }
+
+function updateAlphabet(val) {
+	alphabet = val
+	if (val === 'c') {
+		latEl.style.background = ''
+		cyrEl.style.background = '#444'
+	} else {
+		latEl.style.background = '#444'
+		cyrEl.style.background = ''
+	}
+}
+
+updateAlphabet('c')
+
+cyrEl.addEventListener('click', e => updateAlphabet('c'))
+latEl.addEventListener('click', e => updateAlphabet('l'))
 
 init()
