@@ -1,0 +1,40 @@
+.main {
+	font-size: 2em;
+	display: flex;
+	margin-top: 20vh;
+	align-items: center;
+	height: 100%;
+	flex-direction: column;
+	font-family: 'Roboto', sans-serif;
+}
+
+body {
+	display: flex;
+	flex-direction: row;
+	margin: 0;
+	background: #333;
+	color: #fff;
+}
+
+.container {
+	flex: 1 0 auto;
+	display: flex;
+	flex-direction: column;
+	margin-left: -20%;
+}
+
+.interval {
+	text-align: center;
+	margin: auto;
+	width: 100%;
+	font-size: 2em;
+}
+
+.color {
+	width: 2vw;
+	height: 1vh;
+}
+.wordList {
+	width: 20%;
+	margin: 1em;
+}

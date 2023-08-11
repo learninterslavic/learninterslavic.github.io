@@ -1,0 +1,16 @@
+{
+  "name": "interslavic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "type": "module",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-html-parser": "^6.1.5"
+  }
+}
